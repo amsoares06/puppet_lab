@@ -46,21 +46,23 @@ user.pp:
 	}
 
 
-Esse código criará um grupo chamado `gerencia`, um usuário `bemer` dentros dos grupos `gerencia` e `sudo` para ter acesso de root através do comando `sudo`. Será configurada também a chave pública do usuário `bemer` para acesso usando a chave privada `bemer_key` que se encontra nesse repositório. Essa chave privada encontra-se no diretório `resources` desse repositório.
+Esse código criará um grupo chamado `gerencia`, um usuário `bemer` dentros dos grupos `gerencia` e `sudo` para ter acesso de root através do comando `sudo`. Será configurada também a senha e uma chave pública para o usuário `bemer`, para acesso usando a chave privada `bemer_key` que se encontra nesse repositório. Essa chave privada encontra-se no diretório `resources` desse repositório.
 
 > OBS: é necessário que o grupo `sudo` tenha permissões concedidas no arquivo `/etc/sudoers`, essa é uma configuração padrão do Ubuntu 16.04 LTS.
 
 Para testar basta logar no `Puppet Client`:
 
-	$ ssh -i bemer_key bemer@puppetclient
+	$ ssh -i bemer_key bemer@<IP do puppetclient>
 	$ id
 	uid=10001(bemer) gid=10001(bemer) groups=10001(bemer),27(sudo),501(gerencia)
 	$ sudo -l
 	User bemer may run the following commands on puppetclient:
     (ALL : ALL) ALL
 
+Caso prefira a senha do usuário `bemer` é `abc123`.
 
-## Alterando a porta do SSH
+
+## Instalando e alterando a porta do SSH
 
 Para a configuração do SSH, precisaremos instalar um módulo externo a partir do `Puppet Forge`, para isso, no `Puppet Master`, basta rodar o comando abaixo:
 
@@ -92,7 +94,7 @@ ssh.pp:
 	}
 
 
-Esse código alterará a porta do SSH da padrão `22` para uma porta alta `2222`. Para testar basta usar o comando abaixo ao logar no `Puppet Client`:
+Esse código alterará a porta do SSH da padrão `22` para uma porta alta `2222`. Caso o SSH server não esteja instalado, ele será instalado. Para testar basta usar o comando abaixo ao logar no `Puppet Client`:
 
 	$ ssh -i bemer_key -p 2222 bemer@puppetclient
 
